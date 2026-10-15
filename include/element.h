@@ -37,6 +37,8 @@ _Bool element_valid(Element *);
 _Bool element_equals(Element *, Element *);
 _Bool element_cmp_type(Element *, Element *);
 
+Element *element_copy(Element *);
+
 Element *element_create(ElementType);
 void element_destroy(Element *);
 

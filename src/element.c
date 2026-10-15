@@ -7,33 +7,35 @@
 
 _Bool element_print(Element *e)
 {
-  if (!element_valid(e)) return false;
+  if (!element_valid(e))
+    return false;
   
+  int status = 0;
   switch (e->type) {
 
   case TYPE_INTEGER:
-    printf("%ld: INTEGER\n", e->data.i);
+    status = printf("%ld: INTEGER\n", e->data.i);
     break;
   case TYPE_SIZE:
-    printf("%zu: SIZE\n", e->data.s);
+    status = printf("%zu: SIZE\n", e->data.s);
     break;
   case TYPE_DECIMAL:
-    printf("%f: DECIMAL\n", e->data.f);
+    status = printf("%f: DECIMAL\n", e->data.f);
     break;
   case TYPE_CHARACTER:
-    printf("'%c': CHARACTER\n", e->data.c);
+    status = printf("'%c': CHARACTER\n", e->data.c);
     break;
   case TYPE_TEXT:
-    printf("'%s': TEXT\n", e->data.t);
+    status = printf("'%s': TEXT\n", e->data.t);
     break;
   case TYPE_BOOL:
-    printf("%s: BOOLEAN\n", e->data.b ? "true" : "false");
+    status = printf("%s: BOOLEAN\n", e->data.b ? "true" : "false");
     break;
   default:
     fprintf(stderr, "UNREACHABLE: not valid element\n");
     abort();
   }
-  return true;
+  return status > 0;
 }
 
 _Bool element_valid(Element *e)
@@ -78,6 +80,36 @@ _Bool element_cmp_type(Element *e1, Element *e2)
   return e1->type == e2->type;
 }
 
+Element *element_copy(Element *e)
+{
+  if (!element_valid(e)) {
+    return NULL;
+  }
+
+  Element *new = element_create(e->type);
+  switch (e->type) {
+
+  case TYPE_INTEGER:
+    element_set(new, &e->data.i);
+    return new;
+  case TYPE_SIZE:
+    element_set(new, &e->data.s);
+    return new;
+  case TYPE_DECIMAL:
+    element_set(new, &e->data.f);
+    return new;
+  case TYPE_CHARACTER:
+    element_set(new, &e->data.c);
+    return new;
+  case TYPE_TEXT:
+    element_set(new, e->data.t);
+    return new;
+  case TYPE_BOOL:
+    element_set(new, &e->data.b);
+    return new;
+  }
+}
+
 Element *element_create(const ElementType type)
 {
   Element *e = malloc(sizeof(*e));
@@ -107,6 +139,7 @@ _Bool element_set(Element *e, void *data)
     return true;
   case TYPE_TEXT:
     e->data.t = (char *)data;
+    return true;
   case TYPE_BOOL:
     e->data.b = *(bool *)data;
     return true;
