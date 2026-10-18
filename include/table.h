@@ -31,11 +31,11 @@ void table_destroy(Table *);
 _Bool table_add_field(Table *, Field *);
 
 // Verification
-_Bool table_has(Table *, char *name);
-_Bool table_has_elements(Table *, Element *);
+_Bool table_has_field(Table *, char *name);
+_Bool table_has_element(Table *, Element *);
 
-_Bool table_valid(Table *); // Check if the table is !NULL and has valid fields
-_Bool table_validate(Table *, _Bool keep); // Be careful with this, it may delete some fields and elements
+_Bool table_valid(Table *); // Check if the table is not NULL and has valid fields
+_Bool table_validate(Table *, _Bool keep); // This function may delete some fields and elements
 
 // Get and Set
 Field *table_get_field(Table *, char *);
